@@ -20,7 +20,7 @@ The Network Scanner Service is designed to scan the local network every 5 minute
    ```bash
    sudo apt-get update
    sudo apt-get install arp-scan dnsutils
-   # Install rclone from https://rclone.org/downloads/
+   sudo apt install rclone
    ```
 
 2. **Configure `rclone`:**
@@ -41,6 +41,23 @@ The Network Scanner Service is designed to scan the local network every 5 minute
 
 5. **Create Systemd Service:**
    Create a file named `networkscanner.service` in `/etc/systemd/system/` and populate it with the provided service configuration.
+
+   ```ini
+   [Unit]
+   Description=Network Scanner Service
+   Wants=network-online.target
+   After=network-online.target
+   
+   [Service]
+   Type=simple
+   User=pi
+   ExecStart=/bin/bash /home/pi/scan/scan.sh
+   Restart=on-failure
+   RestartSec=5s
+   
+   [Install]
+   WantedBy=multi-user.target
+   ```
 
 ## Usage
 
